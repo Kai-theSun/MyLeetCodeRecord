@@ -1,6 +1,8 @@
 import heapq
 import math
 
+from PIL.ImageChops import difference
+
 """
    No.2530
    You are given a 0-indexed integer array nums and an integer k. 
@@ -53,3 +55,54 @@ def maxSubArray(nums):
             max_end += nums[i]
         max_sub_arr = max(max_sub_arr, max_end)
     return max_sub_arr
+
+
+"""
+No.1405
+A string s is called happy if it satisfies the following conditions:
+
+s only contains the letters 'a', 'b', and 'c'.
+s does not contain any of "aaa", "bbb", or "ccc" as a substring.
+s contains at most a occurrences of the letter 'a'.
+s contains at most b occurrences of the letter 'b'.
+s contains at most c occurrences of the letter 'c'.
+Given three integers a, b, and c, return the longest possible happy string. If there are multiple longest happy strings, return any of them. If there is no such string, return the empty string "".
+
+A substring is a contiguous sequence of characters within a string.
+"""
+def longestDiverseString(self, a, b, c):
+    """
+    :type a: int
+    :type b: int
+    :type c: int
+    :rtype: str
+    """
+    result_str = ''
+    list_abc = [[a, 'a', 'aa'], [b, 'b', 'bb'], [c, 'c', 'cc']]
+    list_abc.sort(reverse=True)
+    max_letter = list_abc[0]
+    middle_letter = list_abc[1]
+    min_letter = list_abc[2]
+    #use a mathematical function to solve this problem
+    if max_letter[0] >= 2 * (min_letter[0] + middle_letter[0]):
+        result_str += (max_letter[2] + min_letter[1]) * min_letter[0]
+        result_str += (max_letter[2] + middle_letter[1]) * middle_letter[0]
+        if max_letter[0] - 2 * (min_letter[0] + middle_letter[0]) >= 2:
+            result_str += max_letter[2]
+        elif max_letter[0] - 2 * (min_letter[0] + middle_letter[0]) == 1:
+            result_str += max_letter[1]
+    elif min_letter[0] + middle_letter[0] < max_letter[0] < 2 * (min_letter[0] + middle_letter[0]):
+        difference = max_letter[0] - middle_letter[0] - min_letter[0]
+        if difference > middle_letter[0]:
+            result_str += (max_letter[2] + middle_letter[1]) * middle_letter[0]
+            result_str += (max_letter[2] + min_letter[1]) * (difference - middle_letter[0])
+            result_str += (max_letter[1] + min_letter[1]) * (min_letter[0] + middle_letter[0] - difference)
+        elif difference <= middle_letter[0]:
+            result_str += (max_letter[2] + middle_letter[1]) * difference
+            result_str += (max_letter[1] + middle_letter[1]) * (middle_letter[0] - difference)
+            result_str += (max_letter[1] + min_letter[1]) * min_letter[0]
+    elif max_letter[0] <= min_letter[0] + middle_letter[0]:
+        result_str += (max_letter[1] + middle_letter[1] + min_letter[1]) * (middle_letter[0] + min_letter[0] - max_letter[0])
+        result_str += (max_letter[1] + min_letter[1]) * (max_letter[0] - middle_letter[0])
+        result_str += (max_letter[1] + middle_letter[1]) * (max_letter[0] - min_letter[0])
+    return result_str
