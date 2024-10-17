@@ -1,8 +1,6 @@
 import heapq
 import math
 
-from PIL.ImageChops import difference
-
 """
    No.2530
    You are given a 0-indexed integer array nums and an integer k. 
@@ -106,3 +104,30 @@ def longestDiverseString(self, a, b, c):
         result_str += (max_letter[1] + min_letter[1]) * (max_letter[0] - middle_letter[0])
         result_str += (max_letter[1] + middle_letter[1]) * (max_letter[0] - min_letter[0])
     return result_str
+
+
+"""
+No.670
+You are given an integer num. You can swap two digits at most once to get the maximum valued number.
+Return the maximum valued number you can get.
+"""
+def maximumSwap(num):
+    """
+    :type num: int
+    :rtype: int
+    """
+    sorted_num = sorted(str(num), reverse=True)
+    original_num = list(str(num))
+    index = 0
+    for i in range(len(original_num)):
+        if original_num[i] != sorted_num[i]:
+            index = i
+            break
+    max_index = index
+    current_max = original_num[index]
+    for i in range(index, len(original_num)):
+        if original_num[i] >= current_max:
+            current_max = original_num[i]
+            max_index = i
+    original_num[max_index], original_num[index] = original_num[index], original_num[max_index]
+    return int(''.join(original_num))
