@@ -12,7 +12,7 @@ Given three integers a, b, and c, return the longest possible happy string. If t
 
 A substring is a contiguous sequence of characters within a string.
 """
-def longestDiverseString(self, a, b, c):
+def longestDiverseString(a:int, b:int, c:int)->str:
     """
     :type a: int
     :type b: int
@@ -55,7 +55,7 @@ No.670
 You are given an integer num. You can swap two digits at most once to get the maximum valued number.
 Return the maximum valued number you can get.
 """
-def maximumSwap(num):
+def maximumSwap(num:int)->int:
     """
     :type num: int
     :rtype: int

@@ -1,6 +1,8 @@
 import heapq
 import math
 from collections import deque
+from typing import List
+
 """
    No.2530
    You are given a 0-indexed integer array nums and an integer k. 
@@ -11,7 +13,7 @@ from collections import deque
    replace nums[i] with ceil(nums[i] / 3).
    Return the maximum possible score you can attain after applying exactly k operations.
 """
-def maximalScore(nums, k):
+def maximalScore(nums:List[int], k:int)->int:
     score = 0
     heap = []
 
@@ -41,7 +43,7 @@ Given a string expression that represents a boolean expression, return the evalu
 
 It is guaranteed that the given expression is valid and follows the given rules.
 """
-def parseBoolExpr(expression):
+def parseBoolExpr(expression:str)->bool:
     """
     :type expression: str
     :rtype: bool
