@@ -89,3 +89,50 @@ def parseBoolExpr(expression:str)->bool:
         return True
     elif result == "f":
         return False
+
+"""
+No.3254
+You are given an array of integers nums of length n and a positive integer k.
+The power of an array is defined as:
+Its maximum element if all of its elements are consecutive 
+and sorted in ascending order, -1 otherwise.
+You need to find the power of all subarrays of nums of size k.
+Return an integer array results of size n - k + 1,
+where results[i] is the power of nums[i..(i + k - 1)].
+"""
+
+def resultsArray(nums, k):
+    """
+    :type nums: List[int]
+    :type k: int
+    :rtype: List[int]
+    """
+    if k == 1:
+        return nums
+
+    left_index, right_index = 0, k - 1
+    newest_unsorted_index = -1
+    sublist_power = []
+
+    for i in range(left_index, right_index - 1):
+        if nums[i + 1] != nums[i] + 1:
+            newest_unsorted_index = i
+
+    while right_index < len(nums):
+        if left_index <= newest_unsorted_index:
+            if nums[right_index] != nums[right_index - 1] + 1:
+                newest_unsorted_index = right_index - 1
+            sublist_power.append(-1)
+            right_index += 1
+            left_index += 1
+            continue
+        else:
+            if nums[right_index] != nums[right_index - 1] + 1:
+                newest_unsorted_index = right_index - 1
+                sublist_power.append(-1)
+            else:
+                sublist_power.append(nums[right_index])
+            right_index += 1
+            left_index += 1
+            continue
+    return sublist_power
