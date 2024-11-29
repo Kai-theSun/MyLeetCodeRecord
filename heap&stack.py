@@ -113,6 +113,11 @@ def resultsArray(nums, k):
     left_index, right_index = 0, k - 1
     newest_unsorted_index = -1
     sublist_power = []
+    # use newest_unsorted_index to record an "invalid" index, which means if there exists
+    # an invalid index between our left and right index, then we can judge this subarray
+    # "invalid" without further calculation. On the other hand, if there is not any invalid
+    # index between, we only need to compare the rightest two elements, and append the value
+    # of new element if it is sorted or, append -1 if it is unsorted and renew the invalid index
 
     for i in range(left_index, right_index - 1):
         if nums[i + 1] != nums[i] + 1:
