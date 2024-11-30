@@ -75,3 +75,42 @@ def maximumSwap(num:int)->int:
             max_index = i
     original_num[max_index], original_num[index] = original_num[index], original_num[max_index]
     return int(''.join(original_num))
+
+"""
+No.62
+There is a robot on an m x n grid. The robot is initially located at the top-left corner 
+(i.e., grid[0][0]). 
+The robot tries to move to the bottom-right corner 
+(i.e., grid[m - 1][n - 1]). 
+The robot can only move either down or right at any point in time.
+Given the two integers m and n, return the number of possible unique paths 
+that the robot can take to reach the bottom-right corner.
+The test cases are generated so that the answer will be less than or equal to 2 * 109
+"""
+def uniquePaths(m, n):
+    """
+    :type m: int
+    :type n: int
+    :rtype: int
+    """
+    if m == 1 or n == 1:
+        return 1
+    l_edge = max(m, n)
+    s_edge = min(m, n)
+    res = [[0] * l_edge]
+    for i in range(l_edge - 1):
+        res.append([0] * (l_edge+1))
+    for i in range(l_edge):
+        res[i][0] = 1
+        sum = 1
+        for j in range(1, i+1):
+            res[i][j] = res[i-1][j] + res[i][j-1]
+            sum += res[i][j]
+            if i >= l_edge-1 and j >= s_edge-1:
+                return res[l_edge - 1][s_edge - 1]
+        res[i][i+1] = sum
+    # Sm,n = Sm,n-1 + Sm-1,n-1 + ... + Sn-1,n-1 + Sn-1,n-2 + ... + Sn-1,1
+    # Sm,n = Sm,n-1 + Sm-1,n
+    return res[l_edge - 1][s_edge - 1]
+
+print(uniquePaths(7,3))
