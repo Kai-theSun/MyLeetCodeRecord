@@ -32,3 +32,61 @@ def backtrack(s, start, seen):
             max_count = max(max_count, 1 + backtrack(s, end, seen))
             seen.remove(sub_string)
     return max_count
+
+
+"""
+No.1717
+给你一个字符串 s 和两个整数 x 和 y 。你可以执行下面两种操作任意次。
+删除子字符串 "ab" 并得到 x 分。
+比方说，从 "cabxbae" 删除 ab ，得到 "cxbae" 。
+删除子字符串"ba" 并得到 y 分。
+比方说，从 "cabxbae" 删除 ba ，得到 "cabxe" 。
+请返回对 s 字符串执行上面操作若干次能得到的最大得分。
+"""
+def maximumGain(s, x, y):
+    """
+    :type s: str
+    :type x: int
+    :type y: int
+    :rtype: int
+    """
+    """
+    一段可以构成ab或ba的子串,能操作几次取决于a,b里较少的那个,我们希望保证能获取最高分
+    因此可以先将高分组合全部删除,再进行一次相同操作删除低分组合以免遗漏
+    """
+    if len(s) <= 1:
+        return 0
+    def pop_ab(s):
+        score = 0
+        stack = []
+        for i in range(len(s)):
+            if not stack:
+                stack.append(s[i])
+            elif stack[-1] == "a" and s[i] == "b":
+                score += x
+                stack.pop()
+            else:
+                stack.append(s[i])
+        return score, stack
+    def pop_ba(s):
+        score = 0
+        stack = []
+        for i in range(len(s)):
+            if not stack:
+                stack.append(s[i])
+            elif stack[-1] == "b" and s[i] == "a":
+                score += y
+                stack.pop()
+            else:
+                stack.append(s[i])
+        return score, stack
+    if x >= y:
+        score1, s = pop_ab(s)
+        score2, s = pop_ba(s)
+    else:
+        score1, s = pop_ba(s)
+        score2, s = pop_ab(s)
+    return score1 + score2
+
+if __name__ == '__main__':
+    pass
