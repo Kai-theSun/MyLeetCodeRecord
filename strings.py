@@ -88,5 +88,52 @@ def maximumGain(s, x, y):
         score2, s = pop_ab(s)
     return score1 + score2
 
+"""
+No.1233
+你是一位系统管理员，手里有一份文件夹列表 folder，你的任务是要删除该列表中的所有 子文件夹，并以 任意顺序 返回剩下的文件夹。
+如果文件夹 folder[i] 位于另一个文件夹 folder[j] 下，那么 folder[i] 就是 folder[j] 的 子文件夹 。
+folder[j] 的子文件夹必须以 folder[j] 开头，后跟一个 "/"。例如，"/a/b" 是 "/a" 的一个子文件夹，但 "/b" 不是 "/a/b/c" 的一个子文件夹。
+文件夹的「路径」是由一个或多个按以下格式串联形成的字符串：'/' 后跟一个或者多个小写英文字母。
+例如，"/leetcode" 和 "/leetcode/problems" 都是有效的路径，而空字符串和 "/" 不是。
+"""
+def removeSubfolders(folder):
+    """
+    :type folder: List[str]
+    :rtype: List[str]
+    """
+    class Trie:
+        def __init__(self):
+            self.children = dict()
+            self.ref = -1
+    
+    root = Trie()
+    for i in range(len(folder)):
+        dir_name = folder[i].split("/")
+        current_node = root
+        for j in range(len(dir_name)):
+            if dir_name[j] not in current_node.children:
+                # 中间节点的ref保持为-1
+                current_node.children.update({dir_name[j]: Trie()})
+            current_node = current_node.children[dir_name[j]]
+        # current_node是最深的目录节点,ref等于其在folder中的索引
+        current_node.ref = i
+    # 最后构造出的树结构中,在folder中出现过的目录节点,ref为它在folder中的索引
+    # folder中没出现的中间节点,其ref值为-1
+    
+    result = []
+    def dfs(trie):
+        if trie.ref == -1:
+            # 说明该节点未在原始folder中出现过,所以继续搜索其子节点
+            for child in trie.children.values():
+                dfs(child)
+        else:
+            # 说明该节点在原始folder中存在,ref为它在folder中的索引,并且其所有祖先节点都未在folder中出现
+            # 该节点的所有孩子节点都是它的子目录,不需要出现在结果中,因此停止搜索直接return
+            result.append(folder[trie.ref])
+            return
+    dfs(root)
+    return result
+    
+
 if __name__ == '__main__':
     pass
